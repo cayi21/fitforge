@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "PowerShell(Get-Command node, npm -ErrorAction SilentlyContinue)",
+      "PowerShell($paths = @\\(\"C:\\\\Program Files\\\\nodejs\\\\npm.cmd\", \"C:\\\\Program Files \\(x86\\)\\\\nodejs\\\\npm.cmd\", \"$env:APPDATA\\\\npm\\\\npm.cmd\", \"$env:LOCALAPPDATA\\\\Programs\\\\node\\\\npm.cmd\"\\); $paths | Where-Object { Test-Path $_ })",
+      "PowerShell(git config --global user.name)",
+      "PowerShell(git config --global user.email)",
+      "PowerShell(git config --global user.name 2>$null)",
+      "PowerShell(git config --global user.email 2>$null)",
+      "PowerShell(git config --global --list 2>$null)",
+      "PowerShell(git config --list --show-origin 2>&1)",
+      "PowerShell(winget --version 2>&1)",
+      "PowerShell(winget install --id GitHub.cli --accept-source-agreements --accept-package-agreements 2>&1)",
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\); gh --version)",
+      "PowerShell($env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\); gh auth login --web --git-protocol https 2>&1)"
+    ]
+  }
+}
