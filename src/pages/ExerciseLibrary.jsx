@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { filterExercises } from '../data/exercises'
+import { getGif } from '../data/exerciseMedia'
 
 const CATEGORIES = ['all', 'chest', 'back', 'shoulders', 'arms', 'legs', 'core']
 const EQUIPMENT = ['all', 'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight']
@@ -81,7 +82,12 @@ export default function ExerciseLibrary() {
               onClick={() => navigate(`/exercises/${ex.slug}`)}
               aria-label={`View ${ex.name}`}
             >
-              <div className="exercise-thumb__img">{ex.emoji}</div>
+              <div className="exercise-thumb__img">
+                {getGif(ex.slug)
+                  ? <img src={getGif(ex.slug)} alt={ex.name} className="exercise-thumb__gif" loading="lazy" onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+                  : null}
+                <span style={{ display: getGif(ex.slug) ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>{ex.emoji}</span>
+              </div>
               <div className="exercise-thumb__body">
                 <div className="exercise-thumb__name">{ex.name}</div>
                 <div className="exercise-thumb__meta">

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getExerciseBySlug } from '../data/exercises'
+import { getGif, getImage } from '../data/exerciseMedia'
 
 const TABS = ['Instructions', 'Cues', 'Mistakes']
 
@@ -8,6 +9,49 @@ const DIFFICULTY_BADGE = {
   beginner: 'badge--success',
   intermediate: 'badge--warning',
   advanced: 'badge--accent',
+}
+
+function ExerciseGif({ slug, emoji }) {
+  const [status, setStatus] = useState('loading') // loading | loaded | error
+  const gifUrl = getGif(slug)
+  const imgUrl = getImage(slug)
+  const src = gifUrl || imgUrl
+
+  if (!src) {
+    return (
+      <div className="ex-gif-wrap ex-gif-wrap--placeholder">
+        <span className="ex-gif-emoji">{emoji}</span>
+        <span className="ex-gif-label">Demo coming soon</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="ex-gif-wrap">
+      {status === 'loading' && (
+        <div className="ex-gif-skeleton">
+          <span className="ex-gif-emoji pulse">{emoji}</span>
+        </div>
+      )}
+      {status === 'error' && (
+        <div className="ex-gif-wrap--placeholder">
+          <span className="ex-gif-emoji">{emoji}</span>
+          <span className="ex-gif-label">Demo unavailable</span>
+        </div>
+      )}
+      <img
+        src={src}
+        alt={`Exercise demonstration`}
+        className="ex-gif-img"
+        style={{ display: status === 'loaded' ? 'block' : 'none' }}
+        onLoad={() => setStatus('loaded')}
+        onError={() => setStatus('error')}
+      />
+      {status === 'loaded' && gifUrl && (
+        <div className="ex-gif-badge">GIF</div>
+      )}
+    </div>
+  )
 }
 
 export default function ExerciseDetail() {
@@ -30,11 +74,8 @@ export default function ExerciseDetail() {
 
   return (
     <div className="section stack stack--lg" style={{ paddingBottom: 48 }}>
-      {/* Video placeholder */}
-      <div className="video-placeholder">
-        <div className="video-placeholder__icon">{ex.emoji}</div>
-        <span>Exercise demo coming soon</span>
-      </div>
+      {/* GIF demo */}
+      <ExerciseGif slug={ex.slug} emoji={ex.emoji} />
 
       {/* Name + tags */}
       <div>
